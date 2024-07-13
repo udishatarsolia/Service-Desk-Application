@@ -1,0 +1,46 @@
+// src/components/RaiseTicket.js
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import { TicketContext } from '../context/TicketContext';
+
+const RaiseTicket = () => {
+  const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState('Low');
+  const [category, setCategory] = useState('General');
+  const { addTicket } = useContext(TicketContext);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/tickets', { description, priority, category });
+      addTicket(response.data);
+    } catch (error) {
+      console.error('Error raising ticket', error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Raise a Ticket</h2>
+      <textarea
+        placeholder="Issue Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+      <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="General">General</option>
+        <option value="Technical">Technical</option>
+        <option value="Billing">Billing</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default RaiseTicket;
