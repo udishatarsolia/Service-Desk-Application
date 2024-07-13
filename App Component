@@ -1,0 +1,32 @@
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import AuthProvider from './context/AuthContext';
+import TicketProvider from './context/TicketContext';
+import Register from './components/Register';
+import Login from './components/Login';
+import RaiseTicket from './components/RaiseTicket';
+import TicketList from './components/TicketList';
+import PrivateRoute from './components/PrivateRoute';
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <TicketProvider>
+        <Router>
+          <div className="app">
+            <Switch>
+              <Route path="/register" component={Register} />
+              <Route path="/login" component={Login} />
+              <PrivateRoute path="/raise-ticket" component={RaiseTicket} />
+              <PrivateRoute path="/tickets" component={TicketList} />
+              <Route path="/" exact component={Login} />
+            </Switch>
+          </div>
+        </Router>
+      </TicketProvider>
+    </AuthProvider>
+  );
+};
+
+export default App;
